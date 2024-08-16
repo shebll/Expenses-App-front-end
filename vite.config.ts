@@ -15,7 +15,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "https://expenses-app-front-end.vercel.app/api": {
+      "/api": {
         target: "https://extracker.shebl.workers.dev",
         changeOrigin: true,
       },

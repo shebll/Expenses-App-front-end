@@ -9,7 +9,7 @@ import { queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "/api/",
+  baseURL: "https://extracker.shebl.workers.dev/api/",
   // timeout: 1000,
   // headers: { "X-Custom-Header": "foobar" },
 });
