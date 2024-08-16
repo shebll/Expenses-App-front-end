@@ -6,7 +6,7 @@ const Profile = () => {
 
   if (isLoading) return <LoadingSkeleton />;
   if (error) return <ErrorHandleUI />;
-  if (!data?.user) return <UnauthorizedUI />;
+  if (!data) return <UnauthorizedUI />;
 
   return <UserProfile user={data.user} />;
 };

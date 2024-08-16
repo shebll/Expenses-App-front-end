@@ -11,7 +11,6 @@ import {
 import Profile from "@/components/pages/Profile";
 const Avatar = () => {
   const { data, isPending } = useQuery(userQueryOption);
-  console.log(data);
   if (isPending)
     return (
       <div className="w-[38px] h-[36px] rounded-lg animate-pulse bg-secondary"></div>

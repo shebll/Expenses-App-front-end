@@ -15,7 +15,7 @@ function TotalExpenses() {
           <span className="inline-block w-24 h-10 mt-2 rounded-md bg-secondary animate-pulse" />
         ) : (
           <span className="text-5xl font-bold text-primary">
-            {data.totalExpenses || 0}$
+            {data.totalExpenses}$
           </span>
         )}
       </div>

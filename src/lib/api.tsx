@@ -1,17 +1,23 @@
-import { hc } from "hono/client";
-import { ApiRoutes } from "@server/index";
+import {
+  ExpenseResponseType,
+  TagResponseType,
+  TotalExpenseType,
+  UserResponseType,
+} from "@/types/types";
 import { queryOptions } from "@tanstack/react-query";
-import { TagType } from "@app/sharedType";
 
-const client = hc<ApiRoutes>("/");
-export const api = client.api;
+import axios from "axios";
+
+export const api = axios.create({
+  baseURL: "/api/",
+  // timeout: 1000,
+  // headers: { "X-Custom-Header": "foobar" },
+});
 
 // user data queries
-const getUserData = async () => {
-  const res = await api.me.$get();
-  if (!res.ok) throw new Error("Server Error");
-
-  const data = await res.json();
+const getUserData = async (): Promise<UserResponseType> => {
+  const res = await api.get<UserResponseType>("me");
+  const data = res.data;
   return data;
 };
 export const userQueryOption = queryOptions({
@@ -21,39 +27,33 @@ export const userQueryOption = queryOptions({
 });
 
 // total expenses data queries
-export const getTotalExpenses = async () => {
-  const res = await api.expenses["total-expenses"].$get();
-  if (!res.ok) throw new Error("Server Error");
-  const data = await res.json();
-
+export const getTotalExpenses = async (): Promise<TotalExpenseType> => {
+  const res = await api.get<TotalExpenseType>("expenses/total-expenses");
+  const data = res.data;
   return data;
 };
-
 export const totalExpensesQueryOption = queryOptions({
   queryKey: ["total-expenses"],
   queryFn: getTotalExpenses,
-  staleTime: 1000 * 60 * 10,
 });
 
 // get expenses data queries
-export const getExpenses = async () => {
-  const res = await api.expenses.$get();
-  if (!res.ok) throw new Error("Server Error");
-  return res.json();
+export const getExpenses = async (): Promise<ExpenseResponseType> => {
+  const res = await api.get<ExpenseResponseType>("expenses");
+  const data = res.data;
+  return data;
 };
-
 export const expensesQueryOption = queryOptions({
   queryKey: ["expenses"],
+  // enabled: false,
   queryFn: getExpenses,
-  staleTime: 1000 * 60 * 10,
 });
 
 // get Tags data queries
-export const getTags = async (): Promise<TagType[]> => {
-  const res = await api.tags.$get();
-  if (!res.ok) throw new Error("Failed to fetch tags");
-  const data = await res.json();
-  return data.tags;
+export const getTags = async (): Promise<TagResponseType> => {
+  const res = await api.get<TagResponseType>("tags");
+  const data = res.data;
+  return data;
 };
 export const getTagsQueryOption = queryOptions({
   queryKey: ["tags"],

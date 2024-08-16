@@ -1,7 +1,6 @@
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
-import { ExpenseWithTagsType } from "@app/sharedType";
 
 interface ExpenseItemProps {
   expense: ExpenseWithTagsType;
@@ -15,10 +14,10 @@ const ExpenseItem = ({ expense, onEdit, onDelete }: ExpenseItemProps) => {
   return (
     <div className="flex items-center justify-between ">
       <div className="flex items-center">
-        <span className="text-4xl">{expense.tag?.tagEmoji}</span>
+        <span className="text-4xl">{expense.tag.tagEmoji}</span>
         <div className="ml-4">
           <div className="text-lg font-bold text-black dark:text-white">
-            {expense.tag?.tagName}
+            {expense.tag.tagName}
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
             {format(timeDate, "HH:mm")} / {expense.date}

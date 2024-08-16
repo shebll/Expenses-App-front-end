@@ -1,9 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 import { api, expensesQueryOption } from "@/lib/api";
 import ExpenseItem from "./ExpenseItem";
+
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { format } from "date-fns";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ExpenseType, ExpenseWithTagsType } from "@app/sharedType";
 
 const Expenses = ({
   onEditExpense,
@@ -14,61 +16,27 @@ const Expenses = ({
   const { error, isPending, data } = useQuery(expensesQueryOption);
 
   const deleteExpenseMutation = useMutation({
-    mutationFn: (id: number) =>
-      api.expenses[":id"].$delete({ param: { id: String(id) } }),
+    mutationFn: (id: number) => api.delete(`expenses/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["expenses"] });
       queryClient.invalidateQueries({ queryKey: ["total-expenses"] });
     },
   });
 
-  if (error) {
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error.message}</AlertDescription>
-      </Alert>
-    );
-  }
+  if (error) return <ErrorUi error={error} />;
+  if (isPending) return <LoadingUi />;
 
-  if (isPending)
-    return (
-      <>
-        <div className="flex flex-col w-full gap-4">
-          <div className="flex justify-between">
-            <span className="inline-block w-32 h-6 rounded-md bg-secondary animate-pulse"></span>
-            <span className="inline-block w-24 h-6 rounded-md bg-secondary animate-pulse"></span>
-          </div>
-          <hr />
-          {[0, 1, 2, 3].map((_, index) => (
-            <div className="flex justify-between" key={index}>
-              <div className="flex items-center gap-4">
-                <span className="inline-block w-12 h-12 rounded-md bg-secondary animate-pulse"></span>
-                <div className="flex flex-col gap-2">
-                  <span className="inline-block w-24 h-4 rounded-md bg-secondary animate-pulse"></span>
-                  <span className="inline-block h-3 rounded-md w-28 bg-secondary animate-pulse"></span>
-                </div>
-              </div>
-              <span className="inline-block w-24 h-4 rounded-md bg-secondary animate-pulse"></span>
-            </div>
-          ))}
-        </div>
-      </>
-    );
-
-  const groupedExpenses =
-    data &&
-    data.expenses.reduce(
-      (acc, expense) => {
-        const date = format(new Date(expense.createdAt!), "MMMM d, yyyy");
-        if (!acc[date]) {
-          acc[date] = [];
-        }
-        acc[date].push(expense);
-        return acc;
-      },
-      {} as { [date: string]: ExpenseWithTagsType[] }
-    );
+  const groupedExpenses = data.expenses.reduce(
+    (acc, expense) => {
+      const date = format(new Date(expense.date!), "MMMM d, yyyy");
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(expense);
+      return acc;
+    },
+    {} as { [date: string]: ExpenseWithTagsType[] }
+  );
 
   const handleEdit = (expense: ExpenseType) => {
     onEditExpense(expense);
@@ -119,3 +87,38 @@ const Expenses = ({
 };
 
 export default Expenses;
+
+const LoadingUi = () => {
+  return (
+    <>
+      <div className="flex flex-col w-full gap-4">
+        <div className="flex justify-between">
+          <span className="inline-block w-32 h-6 rounded-md bg-secondary animate-pulse"></span>
+          <span className="inline-block w-24 h-6 rounded-md bg-secondary animate-pulse"></span>
+        </div>
+        <hr />
+        {[0, 1, 2, 3].map((_, index) => (
+          <div className="flex justify-between" key={index}>
+            <div className="flex items-center gap-4">
+              <span className="inline-block w-12 h-12 rounded-md bg-secondary animate-pulse"></span>
+              <div className="flex flex-col gap-2">
+                <span className="inline-block w-24 h-4 rounded-md bg-secondary animate-pulse"></span>
+                <span className="inline-block h-3 rounded-md w-28 bg-secondary animate-pulse"></span>
+              </div>
+            </div>
+            <span className="inline-block w-24 h-4 rounded-md bg-secondary animate-pulse"></span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
+
+const ErrorUi = ({ error }: { error: Error }) => {
+  return (
+    <Alert variant="destructive">
+      <AlertTitle>Error</AlertTitle>
+      <AlertDescription>{error.message}</AlertDescription>
+    </Alert>
+  );
+};
