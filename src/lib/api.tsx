@@ -9,9 +9,8 @@ import { queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://extracker.shebl.workers.dev/api/",
-  // timeout: 1000,
-  // headers: { "X-Custom-Header": "foobar" },
+  baseURL: "/api/",
+  timeout: 1000,
 });
 
 // user data queries
