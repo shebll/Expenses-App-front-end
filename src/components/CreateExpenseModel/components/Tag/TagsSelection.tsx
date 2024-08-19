@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { getTagsQueryOption } from "@/lib/api";
-
-import { TagAddForm } from "./TagAddForm";
-import { TagEditForm } from "./TagEditForm";
 
 import { useQuery } from "@tanstack/react-query";
 import { FieldError, UseFormRegister } from "react-hook-form";
@@ -22,17 +19,19 @@ type TagsSelectionProps = {
   }>;
   error: FieldError | undefined;
   value: number | undefined;
+  setIsAddingTag: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsUpdateTag: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedTag: React.Dispatch<React.SetStateAction<TagType | undefined>>;
 };
 
 const TagsSelection: React.FC<TagsSelectionProps> = ({
   register,
   error,
+  setIsAddingTag,
+  setIsUpdateTag,
+  setSelectedTag,
   value,
 }) => {
-  const [isAddingTag, setIsAddingTag] = useState(false);
-  const [isUpdateTag, setIsUpdateTag] = useState(false);
-  const [selectedTag, setSelectedTag] = useState<TagType>();
-
   const { data, isLoading } = useQuery(getTagsQueryOption);
 
   if (isLoading) return <div>Loading tags...</div>;
@@ -80,20 +79,14 @@ const TagsSelection: React.FC<TagsSelectionProps> = ({
           </div>
         </div>
       ))}
-      {isUpdateTag && selectedTag && (
-        <TagEditForm tag={selectedTag} setIsUpdateTag={setIsUpdateTag} />
-      )}
-      {isAddingTag ? (
-        <TagAddForm setIsAddingTag={setIsAddingTag} />
-      ) : (
-        <Button
-          onClick={() => setIsAddingTag(true)}
-          className="h-20 max-h-full col-span-1 "
-          variant="outline"
-        >
-          Add +
-        </Button>
-      )}
+      <Button
+        type="button"
+        onClick={() => setIsAddingTag(true)}
+        className="h-20 max-h-full col-span-1 "
+        variant="outline"
+      >
+        Add +
+      </Button>
       {error && (
         <p className="col-span-3 text-sm text-red-500">{error.message}</p>
       )}

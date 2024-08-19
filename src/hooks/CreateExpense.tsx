@@ -1,11 +1,15 @@
+import { ExpenseType } from "@/types/types";
 import { create } from "zustand";
 
 type UseCreateExpenseType = {
   openModel: boolean;
-  setOpenModel: () => void;
+  expense: ExpenseType | null;
+  setExpense: (expense: ExpenseType | null) => void;
 };
 
 export const useCreateExpense = create<UseCreateExpenseType>((set) => ({
   openModel: false,
-  setOpenModel: () => set((state) => ({ openModel: !state.openModel })),
+  expense: null,
+  setExpense: (expense) =>
+    set((state) => ({ expense: expense, openModel: !state.openModel })),
 }));

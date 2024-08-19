@@ -43,7 +43,6 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <main className="relative flex flex-col justify-between max-w-lg min-h-screen px-4 py-8 mx-auto overflow-hidden bg-white dark:bg-black">
-            <Header />
             <RouterProvider router={router} />
           </main>
         </ThemeProvider>

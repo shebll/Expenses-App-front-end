@@ -7,6 +7,8 @@ import { format } from "date-fns";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+import { ExpenseType, ExpenseWithTagsType } from "@/types/types";
+
 const Expenses = ({
   onEditExpense,
 }: {

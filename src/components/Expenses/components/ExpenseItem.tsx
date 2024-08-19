@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
+import { ExpenseWithTagsType } from "@/types/types";
 
 interface ExpenseItemProps {
   expense: ExpenseWithTagsType;

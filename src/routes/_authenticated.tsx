@@ -1,8 +1,6 @@
 import { userQueryOption } from "@/lib/api";
 import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 
-// src/routes/_authenticated.tsx
-
 const Component = () => {
   const { user } = Route.useRouteContext();
   if (user == null) {

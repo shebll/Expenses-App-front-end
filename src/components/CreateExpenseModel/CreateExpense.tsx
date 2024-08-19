@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import TagsSelection from "../Tag/TagsSelection";
+import TagsSelection from "./components/Tag/TagsSelection";
 
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,9 @@ import {
   CreateExpenseSchema,
   ExpenseFormValues,
   ExpenseType,
+  TagType,
 } from "@/types/types";
+import { TagForm } from "./components/Tag/TagForm";
 
 interface CreateExpenseProps {
   expense?: ExpenseType | null;
@@ -27,6 +29,10 @@ interface CreateExpenseProps {
 }
 
 const CreateExpense = ({ expense, onClose, openModel }: CreateExpenseProps) => {
+  const [isAddingTag, setIsAddingTag] = useState(false);
+  const [isUpdateTag, setIsUpdateTag] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<TagType>();
+
   const [showCalendar, setShowCalendar] = useState(false);
 
   const queryClient = useQueryClient();
@@ -142,6 +148,9 @@ const CreateExpense = ({ expense, onClose, openModel }: CreateExpenseProps) => {
         <div className="flex flex-col gap-2">
           <h1 className="text-sm text-center text-gray-400">Select The Tag</h1>
           <TagsSelection
+            setIsAddingTag={setIsAddingTag}
+            setIsUpdateTag={setIsUpdateTag}
+            setSelectedTag={setSelectedTag}
             register={register}
             error={errors.tagId}
             value={selectedTagId}
@@ -197,6 +206,11 @@ const CreateExpense = ({ expense, onClose, openModel }: CreateExpenseProps) => {
           </Button>
         </div>
       </form>
+
+      {isUpdateTag && selectedTag && (
+        <TagForm tag={selectedTag} onClose={() => setIsUpdateTag(false)} />
+      )}
+      {isAddingTag && <TagForm onClose={() => setIsAddingTag(false)} />}
     </section>
   );
 };

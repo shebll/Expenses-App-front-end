@@ -15,7 +15,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
-import { Route as LayoutImport } from './routes/_layout'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as AuthenticatedAnalyticsImport } from './routes/_authenticated/analytics'
 
@@ -33,11 +32,6 @@ const RegisterRoute = RegisterImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LayoutRoute = LayoutImport.update({
-  id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,13 +68,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -142,7 +129,6 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/_authenticated",
-        "/_layout",
         "/login",
         "/register"
       ]
@@ -154,9 +140,6 @@ export const routeTree = rootRoute.addChildren({
         "/_authenticated/logs",
         "/_authenticated/"
       ]
-    },
-    "/_layout": {
-      "filePath": "_layout.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Profile from "@/components/pages/Profile";
+import Profile from "./Profile";
 const Avatar = () => {
   const { data, isPending } = useQuery(userQueryOption);
   if (isPending)
