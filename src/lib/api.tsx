@@ -9,7 +9,10 @@ import { queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "/api/",
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://extracker.shebl.workers.dev/api/"
+      : "/api/",
   timeout: 1000,
 });
 
